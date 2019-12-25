@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Users</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
+
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form  th:action="@{/users}" method="POST">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>Number of Users to Display:</label>
+                            <input id="limit" name="limit" type="number" class="form-control"/>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

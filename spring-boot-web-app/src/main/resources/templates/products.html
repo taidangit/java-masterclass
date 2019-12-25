@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments/header :: head">
+
+    <title>Spring Framework Guru</title>
+
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="fragments/header :: navbar"></div>
+
+    <div th:if="${not #lists.isEmpty(products)}">
+        <form th:action="@{/logout}" method="POST">
+            <div class="col-sm-10"><h2>Product Listing</h2></div>
+            <div class="col-sm-2" style="padding-top: 30px;">
+                <span sec:authorize="isAuthenticated()">
+                    <input type="submit" value="Sign Out" />
+                </span>
+            </div>
+        </form>
+        <table class="table table-striped">
+            <tr>
+                <th class="text-center">Id</th>
+                <th class="text-center">Description</th>
+                <th class="text-center">Price</th>
+                <th class="text-center" sec:authorize="hasAnyRole('USER','ADMIN')">View</th>
+                <th class="text-center" sec:authorize="hasRole('ADMIN')">Update</th>
+                <th class="text-center" sec:authorize="hasRole('ADMIN')">Delete</th>
+            </tr>
+            <tr th:each="product : ${products}">
+                <td class="text-center">
+                    <a th:text="${product.id}" th:href="${'/product/show/' + product.id}"></a>
+                </td>
+                <td class="text-center" th:text="${product.description}"></td>
+                <td class="text-center" th:text="${product.price}"></td>
+                <td class="text-center" sec:authorize="hasAnyRole('USER','ADMIN')">
+                    <a th:href="${'/product/show/' + product.id}"
+                       class="btn btn-primary btn-sm">View</a>
+                </td>
+                <td class="text-center" sec:authorize="hasRole('ADMIN')">
+                    <a th:href="${'/product/update/' + product.id}"
+                       class="btn btn-primary btn-sm">Update</a>
+                </td>
+                <td class="text-center" sec:authorize="hasRole('ADMIN')">
+                    <a th:href="${'/product/delete/' + product.id}"
+                       class="btn btn-danger btn-sm"
+                       onclick="if (!(confirm('Are you sure you want to delete this product?'))) return false">Delete</a>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>

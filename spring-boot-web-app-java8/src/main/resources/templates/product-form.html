@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head">
+    <title>Spring Framework Guru</title>
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="fragments/header :: navbar"></div>
+
+    <form class="form-horizontal" th:action="@{/logout}" method="POST">
+        <div class="form-group">
+            <div class="col-sm-10"> <h2>Product Create/Update</h2></div>
+            <div class="col-sm-2" style="padding-top: 30px;">
+                <input  type="submit" value="Sign Out"/>
+            </div>
+        </div>
+    </form>
+
+    <div>
+        <form class="form-horizontal" th:object="${product}" th:action="@{/product/save}" method="POST">
+            <input type="hidden" th:field="*{id}"/>
+            <input type="hidden" th:field="*{version}"/>
+
+
+            <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+                <p>Please Correct Errors Below</p>
+            </div>
+
+            <div class="form-group" th:class="${#fields.hasErrors('description')} ? 'form-group has-error' : 'form-group'">
+                <label class="col-sm-2 control-label">Description:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{description}" th:errorclass="has-error"/>
+                    <span class="help-block" th:if="${#fields.hasErrors('description')}">
+                        <ul>
+                            <li th:each="err : ${#fields.errors('description')}" th:text="${err}"/>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" th:class="${#fields.hasErrors('price')} ? 'form-group has-error' : 'form-group'">
+                <label class="col-sm-2 control-label">Price:</label>
+                <div class="col-sm-10">
+                    <input type="number" min="1" max="5000" step=".01" class="form-control" th:field="*{price}"  th:errorclass="has-error"/>
+                    <span class="help-block" th:if="${#fields.hasErrors('price')}">
+                        <ul>
+                            <li th:each="err : ${#fields.errors('price')}" th:text="${err}"/>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" th:class="${#fields.hasErrors('imageUrl')} ? 'form-group has-error' : 'form-group'">
+                <label class="col-sm-2 control-label">Image Url:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{imageUrl}" th:errorclass="has-error"/>
+                    <span class="help-block" th:if="${#fields.hasErrors('imageUrl')}">
+                        <ul>
+                            <li th:each="err : ${#fields.errors('imageUrl')}" th:text="${err}"/>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head lang="en" th:fragment="head">
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
+
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+
+    <link th:href="@{/css/guru.css}" rel="stylesheet" media="screen"/>
+</head>
+<body>
+
+<div class="container">
+    <div th:fragment="navbar">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" th:href="@{/}">Home</a>
+                    <ul class="nav navbar-nav">
+                        <li><a th:href="@{/product/list}">Products</a></li>
+                        <li><a th:href="@{/product/new}" sec:authorize="hasRole('ADMIN')">Create New Product</a></li>
+                        <li><a th:href="@{/login}">Sign In</a></li>
+                        <li><a th:href="@{/register/showRegistrationForm}" sec:authorize="hasRole('USER')">Register New
+                            User</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+        <div>
+            <span sec:authorize="isAuthenticated()">
+                Welcome <span sec:authentication="name"></span>,
+                Roles: <span sec:authentication="principal.authorities"></span>
+            </span>
+        </div>
+
+        <div class="jumbotron">
+            <div class="row text-center">
+
+                <h2>Spring Framework Guru</h2>
+
+                <h3>Spring Boot Web App</h3>
+
+            </div>
+            <div class="row text-center">
+                <img th:src="@{/images/NewBannerBOOTS_2.png}" width="400"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

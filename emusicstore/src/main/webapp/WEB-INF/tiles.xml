@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+	<definition name="master" template="/WEB-INF/views/layout/master-layout.jsp">
+		<put-attribute name="title" value="My Music Store" />
+		<put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/layout/body.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/layout/footer.jsp" />
+	</definition>
+	
+	<definition name="home" extends="master">
+		<put-attribute name="body" value="/WEB-INF/views/home.jsp" />
+	</definition>
+
+    <definition name="productList" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/productList.jsp" />
+    </definition>
+
+    <definition name="addProduct" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/addProduct.jsp" />
+    </definition>
+
+    <definition name="viewProduct" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/viewProduct.jsp" />
+    </definition>
+
+    <definition name="productInventory" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/admin/productInventory.jsp" />
+    </definition>
+
+    <definition name="admin" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/admin/admin.jsp" />
+    </definition>
+
+    <definition name="access-denied" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/access-denied.jsp" />
+    </definition>
+
+    <definition name="customerManagement" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/admin/customerManagement.jsp" />
+    </definition>
+
+    <definition name="cart" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/cart.jsp" />
+    </definition>
+
+    <definition name="collectCustomerInfo" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/checkout/collectCustomerInfo.jsp" />
+    </definition>
+
+    <definition name="collectShippingDetail" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/checkout/collectShippingDetail.jsp" />
+    </definition>
+
+    <definition name="orderConfirmation" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/checkout/orderConfirmation.jsp" />
+    </definition>
+
+    <definition name="thankCustomer" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/checkout/thankCustomer.jsp" />
+    </definition>
+
+    <definition name="cancelCheckout" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/checkout/checkOutCancelled.jsp" />
+    </definition>
+
+    <definition name="about" extends="master">
+        <put-attribute name="body" value="/WEB-INF/views/about.jsp" />
+    </definition>
+
+</tiles-definitions>

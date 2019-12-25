@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+    <var name="order" class="com.emusicstore.entity.CustomerOrder" />
+
+    <action-state id="addCartToOrder">
+        <evaluate expression="cartDAOImpl.getCartById(requestParameters.cartId)" result="order.cart" />
+        <transition to="collectCustomerInfo" />
+    </action-state>
+
+    <view-state id="collectCustomerInfo" model="order">
+        <transition on="customerInfoCollected" to="collectShippingDetail" />
+        <transition on="cancel" to="cancelCheckout" />
+    </view-state>
+
+    <view-state id="collectShippingDetail" model="order">
+        <transition on="shippingDetailCollected" to="orderConfirmation" />
+        <transition on="backToCollectCustomerInfo" to="collectCustomerInfo" />
+        <transition on="cancel" to="cancelCheckout" />
+    </view-state>
+
+    <view-state id="orderConfirmation" model="order">
+        <transition on="orderConfirmed" to="thankCustomer" />
+        <transition on="backToCollectShippingDetail" to="collectShippingDetail" />
+        <transition on="cancel" to="cancelCheckout" />
+    </view-state>
+
+    <view-state id="thankCustomer">
+        <transition to="endState" />
+    </view-state>
+
+    <view-state id="cancelCheckout">
+        <transition to="endState" />
+    </view-state>
+
+    <end-state id="endState" />
+</flow>

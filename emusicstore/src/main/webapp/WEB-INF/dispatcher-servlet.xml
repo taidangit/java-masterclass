@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:webflow-config="http://www.springframework.org/schema/webflow-config"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/webflow-config http://www.springframework.org/schema/webflow-config/spring-webflow-config.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- Add support for component scanning -->
+    <context:component-scan base-package="com.emusicstore" />
+
+    <!-- Add support for conversion, formatting and validation support -->
+    <mvc:annotation-driven/>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="order" value="0" />
+        <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+    </bean>
+    <bean id="tilesConfigure" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/tiles.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Define Spring MVC view resolver -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="order" value="1" />
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <webflow-config:flow-registry id="flowRegistry" base-path="/WEB-INF/flows" flow-builder-services="flowBuilderServices">
+        <webflow-config:flow-location path="checkout/checkout-flow.xml" id="checkout" />
+    </webflow-config:flow-registry>
+
+
+    <webflow-config:flow-executor id="flowExecutor" flow-registry="flowRegistry" />
+
+    <bean id="flowHandlerAdapter" class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
+        <property name="flowExecutor" ref="flowExecutor" />
+    </bean>
+
+    <bean id="flowHandlerMapping" class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
+        <property name="flowRegistry" ref="flowRegistry" />
+    </bean>
+
+    <webflow-config:flow-builder-services id="flowBuilderServices" view-factory-creator="mvcViewFactoryCreator" />
+
+    <bean id="mvcViewFactoryCreator"
+          class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
+        <property name="viewResolvers" ref="viewResolver" />
+    </bean>
+
+    <!--<bean id="validator"-->
+          <!--class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">-->
+    <!--</bean>-->
+
+    <!-- Step 1: Define Database DataSource / connection pool -->
+    <bean id="myDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/emusicstore?useSSL=false" />
+        <property name="user" value="root" />
+        <property name="password" value="1234" />
+
+        <!-- these are connection pool properties for C3P0 -->
+        <property name="minPoolSize" value="5" />
+        <property name="maxPoolSize" value="20" />
+        <property name="maxIdleTime" value="30000" />
+    </bean>
+
+    <!-- Step 2: Setup Hibernate session factory -->
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="myDataSource" />
+        <property name="packagesToScan" value="com.emusicstore.entity" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Step 3: Setup Hibernate transaction manager -->
+    <bean id="myTransactionManager"
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- Step 4: Enable configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven transaction-manager="myTransactionManager" />
+
+    <!-- Add support for reading web resources: css, images, js, etc ... -->
+    <mvc:resources location="/resources/" mapping="/resources/**" />
+
+    <!--File Upload-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="1024000" />
+    </bean>
+
+
+</beans>
+
+
+
+
+
+
+
+
+
+
+
